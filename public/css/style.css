@@ -1,7 +1,14 @@
+@keyframes animatedBackground {
+    0% { background-position: 0 0; }
+    50% { background-position: 100% 0; }
+    100% { background-position: 0 0; }
+}
+
 body, h1, form, table {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
 }
 
 body {
@@ -9,7 +16,13 @@ body {
     background-color: #f4f4f4;
     padding: 20px;
     line-height: 1.6;
+    height: 100vh;
+    background: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #dbdbdb, #e2e2e2);
+    background-size: 400% 400%;
+    animation: animatedBackground 20s ease infinite;
 }
+
+
 
 h1 {
     color: #333;

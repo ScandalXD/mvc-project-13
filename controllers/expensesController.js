@@ -1,10 +1,38 @@
+const path = require('path');
 const Expense = require('../models/expense');
 const fs = require('fs');
-const path = './data/expenses.json'; 
+const DATA_FILE = path.join(__dirname, '../data/expenses.json');
 
 let expenses = loadExpenses();
-let nextId = 1;
 let availableIds = [];
+let nextId = expenses.length ? expenses[expenses.length - 1].id + 1 : 1;
+
+
+
+function loadExpenses() {
+  try {
+      if (!fs.existsSync(DATA_FILE)) {
+          fs.writeFileSync(DATA_FILE, JSON.stringify([])); 
+          return [];
+      }
+      const data = fs.readFileSync(DATA_FILE, 'utf8');
+      return JSON.parse(data || '[]'); 
+  } catch (error) {
+      console.error("Could not load expenses:", error);
+      return [];
+  }
+}
+
+
+
+function saveExpenses(expenses) {
+  try {
+      fs.writeFileSync(DATA_FILE, JSON.stringify(expenses, null, 2)); 
+  } catch (error) {
+      console.error("Could not save expenses:", error);
+  }
+}
+
 
 function addExpense(category, amount, date) {
   let id;
@@ -15,6 +43,7 @@ function addExpense(category, amount, date) {
   }
   const expense = new Expense(id, category, amount, date);
   expenses.push(expense);
+  saveExpenses(expenses);
 }
 
 function getExpenses() {
@@ -49,6 +78,7 @@ function deleteExpense(id) {
   } else {
       nextId = id; 
   }
+  saveExpenses(expenses);
 }
 
 
@@ -65,29 +95,9 @@ function getExpenseReport() {
 }
 
 
-function saveExpenses(expenses) {
-  fs.writeFile(path, JSON.stringify(expenses), (err) => {
-      if (err) {
-          console.error('Błąd zapisu danych:', err);
-      }
-  });
-}
 
-function loadExpenses() {
-    try {
-        if (!fs.existsSync(path)) {
-            return []; 
-        }
-        let rawData = fs.readFileSync(path, 'utf8');
-        if (!rawData.trim()) {
-            return [];
-        }
-        return JSON.parse(rawData);
-    } catch (err) {
-        console.error('Błąd odczytu danych:', err);
-        return [];
-    }
-}
+
+
 
 
 module.exports = {
