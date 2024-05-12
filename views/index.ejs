@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tracker wydatków</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  </head>
+  <body>
+    <h1>Tracker wydatków domowych</h1>
+    <div class="controls-container">
+      <form action="" method="get" class="add-report-form">
+        <button type="submit" id="addExpenseButton" class="add-new-expense">
+          Dodaj nowy wydatek
+        </button>
+        <button type="submit" id="showReportButton" class="report-button">
+          Pokaż raport
+        </button>
+      </form>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Kategoria</th>
+          <th>Kwota</th>
+          <th>Data</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% expenses.forEach(function(expense) { %>
+        <tr>
+          <td><%= expense.id %></td>
+          <td><%= expense.category %></td>
+          <td>
+            <%= new Intl.NumberFormat('pl-PL', { style: 'currency', currency:
+            'PLN' }).format(expense.amount) %>
+          </td>
+          <td><%= expense.date %></td>
+          <td>
+            <form
+              action="/edit/<%= expense.id %>"
+              method="get"
+              class="edit-button-form"
+            >
+              <button type="submit" class="edit-button">Edytuj</button>
+            </form>
+            <form
+              action="/delete/<%= expense.id %>"
+              method="get"
+              class="delete-button-form"
+            >
+              <button type="submit" class="delete-button">Usuń</button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <script>
+      document
+        .getElementById("addExpenseButton")
+        .addEventListener("click", function () {
+          this.form.action = "/add";
+        });
+
+      document
+        .getElementById("showReportButton")
+        .addEventListener("click", function () {
+          this.form.action = "/report";
+        });
+    </script>
+  </body>
+</html>

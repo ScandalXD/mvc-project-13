@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Raport wydatków</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  </head>
+  <body>
+    <h1>Raport wydatków</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Kategoria</th>
+          <th>Łączna Kwota</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let category in expenses) { %>
+        <tr>
+          <td><%= category %></td>
+          <td>
+            <%= new Intl.NumberFormat('pl-PL', { style: 'currency', currency:
+            'PLN' }).format(expenses[category]) %>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+    <form action="/" method="get" class="edit-form">
+      <button type="submit" id="returnToList" class="return-to-list">
+        Powrót do listy
+      </button>
+    </form>
+  </body>
+</html>
